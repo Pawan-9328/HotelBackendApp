@@ -44,7 +44,7 @@ app.post('/person', async (req, res) => {
 // Get method to get the person 
 app.get('/person', async (req, res) => {
    try {
-      const data = Person.find();
+      const data = await Person.find().lean();
       console.log('Data Fetched');
       res
          .status(200)
@@ -78,7 +78,7 @@ app.post('/menu', async (req, res) => {
 
 app.get('/menu', async (req, res) => {
    try {
-      const data = MenuItem.find();
+      const data = await MenuItem.find().lean();
       console.log('Data Fetche');
       res
          .status(200)
@@ -90,6 +90,24 @@ app.get('/menu', async (req, res) => {
    }
 })
 
+app.get('/person/:workType', async (req, res) => {
+   try {
+      // workType = parameters 
+      const workType = req.params.workType // Extract the work type from the URL parameter
+      if (workType == 'chef' || workType == 'manager' || workType == 'waiter') {
+         const response = await Person.find({ work: workType });
+         console.log('response fetched');
+         res.status(200).json(response);
+
+      } else {
+         res.status(404).json({ error: 'Invalid work type' });
+      }
+
+   } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: 'Internal Server Error ' })
+   }
+})
 
 
 
