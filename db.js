@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 // Define the MongoDB connection URL
 
-const mongoURL = 'mongodb://localhost:27017/hotels'
+const mongoURL = 'mongodb://localhost:27017/cafeApp'
 
 
 //'mongodb+srv://pawang:<pawan2893>@cluster0.igwuubr.mongodb.net/hotelsApp'
@@ -19,7 +19,7 @@ mongoose.connect(mongoURL, {
 const db = mongoose.connection;
 
 // Define event listeners for database connection 
-db.on('connection', () => {
+db.on('connected', () => {
    console.log('Connected to MongoDB server ');
 });
 
