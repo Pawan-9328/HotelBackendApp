@@ -57,25 +57,6 @@ router.get('/:tasteType', async (req, res) => {
    }
 })
 
-router.put('/:id', async (req, res) => {
-   try {
-      const personId = req.params; //Extract the id from the URL parameter 
-      const updatedPersonData = req.body; // Updated data from the person 
-
-      const response = await Person.findByIdAndUpdate(personId, updatedPersonDate, {
-         new: true, // Return the updated document 
-         runValidators: true // Run Mongoose Validation
-      })
-      if (!updatedPersonData) {
-         return res.status(404).json({ error: 'Person not found' });
-      }
-      console.log('data updated');
-      res.status(200).json(response);
-   } catch (error) {
-      console.log(error);
-      res.status(500).json({ error: 'Internal Server Error' });
-   }
-})
 
 
 
