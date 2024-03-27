@@ -32,11 +32,19 @@ const personSchema = new mongoose.Schema({
    salary: {
       type: Number,
       required: true,
+   },
+   username: {
+      required: type,
+      type: String,
+   },
+   password: {
+      required: type,
+      type: String,
    }
 
 
 })
 
 // Create Person Model 
-const Person  = mongoose.model('Person', personSchema);
+const Person = mongoose.model('Person', personSchema);
 module.exports = Person;
