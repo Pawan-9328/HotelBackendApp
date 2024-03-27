@@ -1,24 +1,25 @@
 const express = require('express');
 const app = express();
 require('dotenv').config();
-
 const db = require('./db');
-
 const bodyParser = require('body-parser')
 app.use(bodyParser.json()); // req body 
-
-
 const PORT = process.env.PORT || 3000;
 
+//...Middleware Function.......
+
+const longRequest = (req, res, next) =>{
+    console.log(`[${new Date().toLocaleString()}] Request Made to: ${req.original}`);
+    next() // Move on to the next phase...
+
+}  
+
+app.use(longRequest)
 app.get('/', function (req, res) {
    res.send('Welcome to my hotels ');
 })
 
-
-
 //.....used router middleware for avoide this......... 
-
-
 
 //... Import the router files...
 const personRoutes = require('./routes/person.routes.js');

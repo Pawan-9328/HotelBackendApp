@@ -39,7 +39,7 @@ router.post('/', async (req, res) => {
 router.get('/', async (req, res) => {
    try {
       const data = await Person.find().lean();
-      console.log('Data Fetched');
+      console.log('Data Fetched Person');
       res
          .status(200)
          .json(data);

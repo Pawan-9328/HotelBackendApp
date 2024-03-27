@@ -27,7 +27,7 @@ router.post('/', async (req, res) => {
 router.get('/', async (req, res) => {
    try {
       const data = await MenuItem.find().lean();
-      console.log('Data Fetch');
+      console.log('Data Fetch Menu');
       res
          .status(200)
          .json(data);
