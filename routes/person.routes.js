@@ -72,7 +72,7 @@ router.post('/login', async (req, res) => {
 
 
 // Get method to get the person 
-router.get('/',jwtAuthMiddleware, async (req, res) => {
+router.get('/', jwtAuthMiddleware, async (req, res) => {
    try {
       const data = await Person.find().lean();
       console.log('Data Fetched Person');
@@ -80,6 +80,23 @@ router.get('/',jwtAuthMiddleware, async (req, res) => {
          .status(200)
          .json(data);
 
+   } catch (error) {
+      console.log(error);
+      res.status(500)
+         .json({ error: 'Internal Server Error' });
+   }
+});
+
+// Profile route...
+router.get('/profile', jwtAuthMiddleware, async (req, res) => {
+   try {
+      const userData = req.user;
+      console.log("User Data: ", userData);
+
+      const userId = userData.id;
+      const user = await Person.findById(userId);
+
+      res.status(200).json({ user });
    } catch (error) {
       console.log(error);
       res.status(500)
