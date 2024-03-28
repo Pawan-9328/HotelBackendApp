@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const Person = require('../models/person.models.js');
-
+const { jwtAuthMiddleware, generateToken } = require('./../jwt.js');
 
 //POST route to add a person 
-router.post('/', async (req, res) => {
+router.post('/signup', async (req, res) => {
    try {
       const data = req.body; // Assuming the request body contains the person data 
 
@@ -21,8 +21,18 @@ router.post('/', async (req, res) => {
       //save the new person to the database
       const response = await newPerson.save()
       console.log('Data saved');
+
+      const payload = {
+         id: response.id,
+         username: response.username
+      }
+      console.log(JSON.stringify(payload));
+
+      // pass userane in payload 
+      const token = generateToken(payload);
+      console.log("Token is : ", token);
       res.status(200)
-         .json(response);
+         .json({ response: response, token: token });
 
    } catch (error) {
       console.log(error);
@@ -32,11 +42,37 @@ router.post('/', async (req, res) => {
 
 })
 
+//...Login Route....
+
+router.post('/login', async (req, res) => {
+   try {
+      // Extract username and password from request body 
+      const { username, password } = req.body;
+
+      //Find the user by username
+      const user = await Person.findOne({ username: username });
+      if (!user || !(await user.comparePassword(password))) {
+         return res.status(401).json({ error: 'Invalid username or password' })
+      }
+      // generates Token 
+      const payload = {
+         id: user.id,
+         username: user.username
+      }
+      const token = generateToken(payload);
+      //return token as a response 
+      res.json({ token })
+
+   } catch (error) {
+      console.log(err);
+      res.status(500).json({ error: 'Internal Server Error' });
+   }
+})
+
 
 
 // Get method to get the person 
-
-router.get('/', async (req, res) => {
+router.get('/',jwtAuthMiddleware, async (req, res) => {
    try {
       const data = await Person.find().lean();
       console.log('Data Fetched Person');

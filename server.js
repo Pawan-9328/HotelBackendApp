@@ -6,7 +6,7 @@ const passport = require('./auth.js');
 
 const db = require('./db');
 const bodyParser = require('body-parser')
-app.use(bodyParser.json()); // req body 
+app.use(bodyParser.json()); // req body  
 const PORT = process.env.PORT || 3000;
 
 //...Middleware Function.......
@@ -23,7 +23,7 @@ app.use(passport.initialize());
 
 const localAuthMiddleware = passport.authenticate('local', { session: false });
 
-app.get('/', localAuthMiddleware, function (req, res) {
+app.get('/', function (req, res) {
    res.send('Welcome to my hotels ');
 })
 
