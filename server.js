@@ -1,9 +1,8 @@
 const express = require('express');
 const app = express();
 require('dotenv').config();
-const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
-const Person = require('./models/person.models.js')
+
+const passport = require('./auth.js');
 
 const db = require('./db');
 const bodyParser = require('body-parser')
@@ -20,30 +19,11 @@ const longRequest = (req, res, next) => {
 
 app.use(longRequest)
 
-app.use(new LocalStrategy(async (USERNAME, password, done) => {
-   // authentication logic here 
-   try {
-      console.log('Received creadentials:', USERNAME, password);
-      const user = Person.findOne({ username: USERNAME });
-      if (!user) {
-         return done(null, false, { message: 'Incorrect username ' });
-      }
-      const isPasswordMatch = user.password === password ? true : false;
+app.use(passport.initialize());
 
-      if (!isPasswordMatch) {
-         return done(null, user);
-      } else{
-           return done(null, false, {message: 'Incorrect password'});
-      }
-   } catch (error) {
-     return done(err);
-     
-   }
+const localAuthMiddleware = passport.authenticate('local', { session: false });
 
-
-}))
-
-app.get('/', function (req, res) {
+app.get('/', localAuthMiddleware, function (req, res) {
    res.send('Welcome to my hotels ');
 })
 
