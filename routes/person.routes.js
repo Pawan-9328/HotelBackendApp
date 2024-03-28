@@ -102,7 +102,7 @@ router.get('/profile', jwtAuthMiddleware, async (req, res) => {
       res.status(500)
          .json({ error: 'Internal Server Error' });
    }
-})
+});
 
 router.get('/:workType', async (req, res) => {
    try {
